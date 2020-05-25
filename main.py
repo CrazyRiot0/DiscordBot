@@ -543,7 +543,7 @@ async def on_message(message):
         await message.channel.send("면")
     elif message.content.startswith("ㅋ"):
         if message.author.bot is False:
-            await message.channel.send("ㅋㅋㅋㅋㅋㅋㅋㅋ")
+            await message.channel.send("ㅋㅋㅋㅋㅋㅋㅋ")
 
 
 file = os.path.join(PATH, "token")
