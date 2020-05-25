@@ -13,6 +13,8 @@ import shutil
 
 client = discord.Client()
 
+PATH = os.path.dirname(os.path.abspath(__file__))
+
 class VideoInfo:
     title = ""
     path = ""
@@ -48,7 +50,7 @@ class AsyncPlayer:
         pass
 
 def ClearYoutubeDL():
-    path = "C:\\Users\\jjaen\\PycharmProjects\\DiscordBot\\youtubedl"
+    path = os.path.join(PATH, "youtubedl")
     if os.path.isdir(path):
         shutil.rmtree(path)
     os.mkdir(path)
@@ -119,10 +121,8 @@ async def on_message(message):
                 await message.channel.send("닉네임을 입력해주세요.")
             else:
                 username = urllib.parse.quote(username)
-                link = "https://r6.tracker.network/profile/pc/"
-                link += username
-                link += "\nhttps://r6.op.gg/search?search="
-                link += username
+                link = "https://r6.tracker.network/profile/pc/" + username
+                link += "\nhttps://r6.op.gg/search?search=" + username
                 await message.channel.send(link)
         elif message.content.startswith("!롤전적"):
             msg = message.content
@@ -131,8 +131,7 @@ async def on_message(message):
                 await message.channel.send("닉네임을 입력해주세요.")
             else:
                 username = urllib.parse.quote(username)
-                link = "https://www.op.gg/summoner/userName="
-                link += username
+                link = "https://www.op.gg/summoner/userName=" + username
                 await message.channel.send(link)
         elif message.content.startswith("!롤체전적"):
             msg = message.content
@@ -141,8 +140,7 @@ async def on_message(message):
                 await message.channel.send("닉네임을 입력해주세요.")
             else:
                 username = urllib.parse.quote(username)
-                link = "https://lolchess.gg/profile/kr/"
-                link += username
+                link = "https://lolchess.gg/profile/kr/" + username
                 await message.channel.send(link)
         elif message.content.startswith("!구글"):
             msg = message.content
@@ -151,8 +149,7 @@ async def on_message(message):
             if len(query) == 0:
                 await message.channel.send("https://www.google.com/")
             else:
-                link = "https://www.google.com/search?q="
-                link += query
+                link = "https://www.google.com/search?q=" + query
                 await message.channel.send(link)
         elif message.content.startswith("!유튜브"):
             msg = message.content
@@ -161,8 +158,7 @@ async def on_message(message):
             if len(query) == 0:
                 await message.channel.send("https://www.youtube.com/")
             else:
-                link = "https://www.youtube.com/results?search_query="
-                link += query
+                link = "https://www.youtube.com/results?search_query=" + query
                 await message.channel.send(link)
         elif message.content.startswith("!네이버"):
             msg = message.content
@@ -171,8 +167,7 @@ async def on_message(message):
             if len(query) == 0:
                 await message.channel.send("https://www.naver.com/")
             else:
-                link = "https://search.naver.com/search.naver?query="
-                link += query
+                link = "https://search.naver.com/search.naver?query=" + query
                 await message.channel.send(link)
         elif message.content.startswith("!나무위키"):
             msg = message.content
@@ -182,8 +177,7 @@ async def on_message(message):
             if len(query) == 0:
                 await message.channel.send("https://namu.wiki/w/")
             else:
-                link = "https://namu.wiki/w/"
-                link += query
+                link = "https://namu.wiki/w/" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find_all("div", {"class": "wiki-heading-content"})
@@ -197,8 +191,7 @@ async def on_message(message):
             if len(query) == 0:
                 await message.channel.send("검색할 내용을 입력해주세요.")
                 return
-            link = "https://www.google.com/search?hl=ko&tbm=isch&sclient=img&q="
-            link += query
+            link = "https://www.google.com/search?hl=ko&tbm=isch&sclient=img&q=" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
         elif message.content.startswith("!다나와"):
@@ -208,8 +201,7 @@ async def on_message(message):
             if len(query) == 0:
                 await message.channel.send("http://danawa.com/")
             else:
-                link = "http://search.danawa.com/dsearch.php?query="
-                link += query
+                link = "http://search.danawa.com/dsearch.php?query=" + query
                 await message.channel.send(link)
         elif message.content.startswith("!번역"): #!번역 한 안녕하세요.
             msg = message.content
@@ -239,8 +231,7 @@ async def on_message(message):
             if len(query) == 0:
                 await message.channel.send("이름을 입력해주세요.")
             query = urllib.parse.quote(query)
-            link = "https://namu.wiki/w/"
-            link += query
+            link = "https://namu.wiki/w/" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find_all("div", {"class" : "wiki-heading-content"})
@@ -254,8 +245,7 @@ async def on_message(message):
             msg = message.content
             query = msg[6:]
             query = urllib.parse.quote(query)
-            link = "https://en.dict.naver.com/#/search?query="
-            link += query
+            link = "https://en.dict.naver.com/#/search?query=" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find("div", class_="row")
@@ -272,9 +262,8 @@ async def on_message(message):
                 await message.channel.send("지역을 입력해주세요.")
             else:
                 query = location + " 날씨"
-                link = "https://search.naver.com/search.naver?query="
                 query = urllib.parse.quote(query)
-                link += query
+                link = "https://search.naver.com/search.naver?query=" + query
                 reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
                 soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
                 code1 = soup.find("span", class_="todaytemp") #온도
@@ -332,8 +321,7 @@ async def on_message(message):
             msg = message.content
             query = msg[1:]
             query = urllib.parse.quote(query)
-            link = "https://www.google.com/search?q="
-            link += query
+            link = "https://www.google.com/search?q=" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find("div", class_="dDoNo vk_bk") #dDoNo vk_bk
@@ -345,8 +333,7 @@ async def on_message(message):
             msg = message.content
             query = msg[1:]
             query = urllib.parse.quote(query)
-            link = "https://www.google.com/search?q="
-            link += query
+            link = "https://www.google.com/search?q=" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find("div", id="cwos")
@@ -358,9 +345,8 @@ async def on_message(message):
                 await message.channel.send("검색 대상을 입력해주세요.")
             else:
                 query = query + " 전화번호"
-                link = "https://search.naver.com/search.naver?query="
                 query = urllib.parse.quote(query)
-                link += query
+                link = "https://search.naver.com/search.naver?query=" + query
                 reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
                 soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
                 code1 = soup.find("a", class_="tit _title _sp_each_url _sp_each_title")
@@ -377,8 +363,7 @@ async def on_message(message):
             query = message.content[4:]
             query = query + " 가사"
             query = urllib.parse.quote(query)
-            link = "https://search.naver.com/search.naver?query="
-            link += query
+            link = "https://search.naver.com/search.naver?query=" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent' : 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find("div", class_="lyrics_area")
@@ -446,7 +431,8 @@ async def on_message(message):
             title = soup.find("span", id="eow-title").text
             title = title.strip()
 
-            download_path = "C:/Users/jjaen/PycharmProjects/DiscordBot/youtubedl/"
+            download_path = os.path.join(PATH, "youtubedl")
+            download_path += "\\"
             string_pool = string.ascii_letters
             _LENGTH = 10
             for i in range(_LENGTH) :
@@ -485,8 +471,7 @@ async def on_message(message):
             S = "**" + query + "** 을 검색하는 중..."
             await message.channel.send(S)
             query = urllib.parse.quote(query)
-            link = "https://www.youtube.com/results?search_query="
-            link += query
+            link = "https://www.youtube.com/results?search_query=" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             SR.clear()
@@ -561,4 +546,8 @@ async def on_message(message):
             await message.channel.send("ㅋㅋㅋㅋㅋㅋㅋ")
 
 
-client.run("NzA2Njg5MjAzNDI5MzEwNTQ4.Xsc7Jw.a2lbbdahZaPNxHpcN4FUPQEg8Ok")
+file = os.path.join(PATH, "token")
+f = open(file, "r")
+TOKEN = f.readline()
+f.close()
+client.run(TOKEN)
