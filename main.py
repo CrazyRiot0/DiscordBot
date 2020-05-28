@@ -10,6 +10,8 @@ import time
 import asyncio
 import os
 import shutil
+import sys
+import subprocess
 
 client = discord.Client()
 
@@ -31,6 +33,8 @@ class SearchResult:
 
 Q = []
 SR = []
+
+ignore = False
 
 flag = True
 class AsyncPlayer:
@@ -60,12 +64,15 @@ def ClearYoutubeDL():
 async def on_ready():
     print(client.user.id)
     print("ready")
-    # game = discord.Game("Rainbow Six Siege")
-    await client.change_presence(status=discord.Status.online)
+    game = discord.Game("!명령어")
+    await client.change_presence(status=discord.Status.online, activity=game)
     ClearYoutubeDL()
 
 @client.event
 async def on_message(message):
+    global ignore
+    if ignore == True and message.author.id != 351677960270381058:
+        return
     if message.content.startswith("!"):
         print("[", end='')
         print(message.author, end="] ")
@@ -73,6 +80,7 @@ async def on_message(message):
         if message.content == "!명령어":
             await message.channel.send("```\n"
                                        "[봇 명령어]\n\n"
+                                       "[!관리자] : 관리자만.\n"
                                        "[!명령어] : 봇의 명령어를 보여줍니다.\n"
                                        "[!안녕] : 봇에게 인사합니다.\n"
                                        "[!아침] : 봇이 아침인사를 합니다.\n"
@@ -102,6 +110,27 @@ async def on_message(message):
                                        "[!다시재생] : 노래를 다시 재생합니다.\n"
                                        "[!정지] : 노래를 정지합니다.\n"
                                        "[!재생목록] : 재생목록을 보여줍니다.\n```")
+        elif message.content.startswith("!관리자"):
+            if message.author.id != 351677960270381058:
+                await message.channel.send("관리자가 아니에요.")
+                return
+            msg = message.content.split(" ")
+            query = msg[1]
+            if query is None:
+                await message.channel.send("명령어를 입력해주세요.")
+            elif query == "잠금":
+                ignore = True
+                await message.channel.send("봇이 대답하지 않습니다.")
+            elif query == "잠금해제":
+                ignore = False
+                await message.channel.send("봇이 대답합니다.")
+            elif query == "실행": #!관리자 실행 []
+                cmd = message.content[8:]
+                if cmd is None:
+                    await message.channel.send("명령어를 입력해주세요.")
+                    return
+                result = subprocess.check_output(cmd, shell=True)
+                await message.channelsend(result)
         elif message.content.startswith("!안녕"):
             await message.channel.send("안녕하세요!")
         elif message.content.startswith("!아침"):
@@ -172,7 +201,7 @@ async def on_message(message):
         elif message.content.startswith("!나무위키"):
             msg = message.content
             query = msg[6:]
-            S = "**" + query + "** 검색 결과입니다.\n"
+            original = query
             query = urllib.parse.quote(query)
             if len(query) == 0:
                 await message.channel.send("https://namu.wiki/w/")
@@ -182,8 +211,22 @@ async def on_message(message):
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find_all("div", {"class": "wiki-heading-content"})
             result = code[0].getText(' ', strip=True)
-            S += result
+
+            S = "**" + original + "** 검색 결과입니다.\n"
             await message.channel.send(S)
+            if len(result) >= 1999:
+                S = ""
+                l = 1999
+                s = 0
+                e = l
+                while True:
+                    S = result[s:e]
+                    if S is None:
+                        break
+                    await message.channel.send(S)
+                    s = e + 1
+                    e = e + l
+            await message.channel.send(result)
         elif message.content.startswith("!이미지"):
             msg = message.content
             query = msg[5:]
@@ -331,14 +374,11 @@ async def on_message(message):
             await message.channel.send(distance)
         elif message.content.startswith("!계산기"):
             msg = message.content
-            query = msg[1:]
-            query = urllib.parse.quote(query)
-            link = "https://www.google.com/search?q=" + query
-            reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
-            soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
-            code = soup.find("div", id="cwos")
-            result = code.text
-            await message.channel.send(result)
+            query = msg[5:]
+            # result = eval(query)
+            result = 0
+            S = query + " = **" + str(result) + "**"
+            await message.channel.send(S)
         elif message.content.startswith("!전화번호"):
             query = message.content[6:]
             if len(query) == 0:
