@@ -73,7 +73,7 @@ async def on_message(message):
     global ignore
     if ignore == True and message.author.id != 351677960270381058:
         return
-    if message.content.startswith("!"):
+    if message.content.startswith("!") and message.content.startswith("!!") is False:
         print("[", end='')
         print(message.author, end="] ")
         print(message.content)
@@ -97,6 +97,7 @@ async def on_message(message):
                                        "[!전화번호 [지역이름]] : 전화번호를 검색합니다.\n"
                                        "[!가사 [노래]] : 노래 가사를 검색합니다.\n"
                                        "[!상태메시지 [말]] : 봇의 상태메시지를 바꿉니다.\n"
+                                       "[!텍스트 [텍스트]] : 텍스트를 멋있게 바꿔줍니다!\n"
                                        "[!명령어 노래봇] : 노래봇 명령어를 보여줍니다.\n```")
         elif message.content.startswith("!명령어 노래봇"):
             await message.channel.send("```\n"
@@ -422,6 +423,28 @@ async def on_message(message):
                 await message.channel.send("상태메시지를 바꿨어요.")
             else:
                 await message.channel.send("상태메시지를 써주세요.")
+        elif message.content.startswith("!텍스트"):
+            msg = message.content
+            q = msg[5:]
+            if len(q) == 0:
+                await message.channel.send("텍스트를 입력해주세요.")
+                return
+            q = urllib.parse.quote(q)
+            link = "http://qaz.wtf/u/convert.cgi?text=" + q
+            reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
+            soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
+            code = soup.find_all("td")
+            S = ""
+            flag = False
+            for X in code:
+                if flag is True:
+                    T = X.text
+                    T = T[:T.rfind('\n')]
+                    S += T
+                    flag = False
+                else:
+                    flag = True
+            await message.channel.send(S)
         elif message.content == "!참가":
             if message.author.voice is None:
                 await message.channel.send("먼저 음성 채널에 들어와 주세요.")
@@ -581,9 +604,9 @@ async def on_message(message):
         await message.channel.send("보여주는부분이네")
     elif message.content == "사발":
         await message.channel.send("면")
-    elif message.content.startswith("ㅋ"):
-        if message.author.bot is False:
-            await message.channel.send("ㅋㅋㅋㅋㅋㅋㅋ")
+    #elif message.content.startswith("ㅋ"):
+    #    if message.author.bot is False:
+    #        await message.channel.send("ㅋㅋㅋㅋㅋㅋㅋ")
 
 
 file = os.path.join(PATH, "token")
