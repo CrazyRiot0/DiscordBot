@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import discord
+from discord import Embed
 from discord.voice_client import VoiceClient
 import urllib
 from bs4 import BeautifulSoup
@@ -78,39 +79,34 @@ async def on_message(message):
         print(message.author, end="] ")
         print(message.content)
         if message.content == "!명령어":
-            await message.channel.send("```\n"
-                                       "[봇 명령어]\n\n"
-                                       "[!관리자] : 관리자만.\n"
-                                       "[!명령어] : 봇의 명령어를 보여줍니다.\n"
-                                       "[!안녕] : 봇에게 인사합니다.\n"
-                                       "[!아침] : 봇이 아침인사를 합니다.\n"
-                                       "[!노예야] : 노예를 부릅니다.\n"
-                                       "[!말해라 [말]] : 봇이 하고 싶은 말을 해줍니다.\n"
-                                       "[!레식전적 [닉네임]] : 레식 전적을 보여줍니다.\n"
-                                       "[!롤전적 [닉네임]] : 롤 전적을 보여줍니다.\n"
-                                       "[!롤체전적 [닉네임]] : 롤체 전적을 보여줍니다.\n"
-                                       "[!구글/유튜브/네이버/나무위키/다나와 [검색]] : 해당 사이트에서 검색합니다.\n"
-                                       "[!번역 [한/영] [문장]] : 한국어->영어, 영어->한국어로 번역합니다.\n"
-                                       "[!영어사전 [단어]] : 네이버 영어사전에 단어를 검색합니다.\n"
-                                       "[!날씨 [지역이름]] : 오늘 날씨를 검색합니다.\n"
-                                       "[!거리 [지역이름] [지역이름]] : 지역과 지역 사이의 거리를 검색합니다.\n"
-                                       "[!전화번호 [지역이름]] : 전화번호를 검색합니다.\n"
-                                       "[!가사 [노래]] : 노래 가사를 검색합니다.\n"
-                                       "[!상태메시지 [말]] : 봇의 상태메시지를 바꿉니다.\n"
-                                       "[!텍스트 [텍스트]] : 텍스트를 멋있게 바꿔줍니다!\n"
-                                       "[!명령어 노래봇] : 노래봇 명령어를 보여줍니다.\n```")
+            embed = discord.Embed(title="𝓓𝓲𝓼𝓒𝓸𝓻𝓭𝓑𝓞𝓣 명령어", colour=discord.Colour.green())
+            embed.add_field(name="**!명령어**", value="봇의 명령어를 보여줍니다.", inline=False)
+            embed.add_field(name="**!안녕**", value="봇에게 인사합니다.", inline=False)
+            embed.add_field(name="**!말해라 [말]**", value="봇이 하고 싶은 말을 해줍니다.", inline=False)
+            embed.add_field(name="**!레식전적 [닉네임]**", value="레식 전적을 보여줍니다.", inline=False)
+            embed.add_field(name="**롤전적 [닉네임]**", value="롤 전적을 보여줍니다.", inline=False)
+            embed.add_field(name="**롤체전적 [닉네임]**", value="롤체 전적을 보여줍니다.", inline=False)
+            embed.add_field(name="**!나무위키 [검색]**", value="나무위키 검색 결과를 보여줍니다.", inline=False)
+            embed.add_field(name="**!날씨 [지역이름]**", value="오늘 날씨를 검색합니다.", inline=False)
+            embed.add_field(name="**!전화번호 [지역이름]**", value="전화번호를 검색합니다.", inline=False)
+            embed.add_field(name="**!가사 [노래]**", value="노래 가사를 검색합니다.", inline=False)
+            embed.add_field(name="**!상태메시지 [상태메시지]**", value="봇의 상태메시지를 바꿉니다.", inline=False)
+            embed.add_field(name="**!텍스트 [텍스트]**", value="텍스트를 멋있게 바꿔줍니다.", inline=False)
+            embed.add_field(name="**!명령어 노래봇**", value="노래봇 명령어를 보여줍니다.", inline=False)
+            await message.channel.send(embed=embed)
         elif message.content.startswith("!명령어 노래봇"):
-            await message.channel.send("```\n"
-                                       "[노래봇 명령어]\n\n"
-                                       "[!참가] : 봇이 음성 채널에 참여합니다.\n"
-                                       "[!나가] : 봇이 음성 채널에서 나갑니다.\n"
-                                       "[!재생 [URL]] : 유튜브에서 노래를 재생합니다.\n"
-                                       "[!검색 [제목]] : 유튜브에서 영상을 검색해 결과를 보여줍니다.\n"
-                                       "[!선택 [번호]] : 검색 결과 중에서 선택합니다.\n"
-                                       "[!일시정지] : 노래를 일시정지합니다.\n"
-                                       "[!다시재생] : 노래를 다시 재생합니다.\n"
-                                       "[!정지] : 노래를 정지합니다.\n"
-                                       "[!재생목록] : 재생목록을 보여줍니다.\n```")
+            embed = discord.Embed(title="𝓓𝓲𝓼𝓒𝓸𝓻𝓭𝓑𝓞𝓣 노래봇 명령어", colour=discord.Colour.green())
+            embed.add_field(name="**!명령어 노래봇**", value="노래봇 명령어를 보여줍니다.", inline=False)
+            embed.add_field(name="**!참가**", value="봇이 음성 채널에 참여합니다.", inline=False)
+            embed.add_field(name="**!나가**", value="봇이 음성 채널에서 나갑니다.", inline=False)
+            embed.add_field(name="**!재생 [URL]**", value="유튜브에서 노래를 재생합니다.", inline=False)
+            embed.add_field(name="**!검색 [제목]**", value="유튜브에서 영상을 검색해 결과를 보여줍니다.", inline=False)
+            embed.add_field(name="**!선택 [번호]**", value="검색 결과 중에서 선택합니다.", inline=False)
+            embed.add_field(name="**!일시정지**", value="노래를 일시정지합니다.", inline=False)
+            embed.add_field(name="**!다시재생**", value="노래를 다시 재생합니다.", inline=False)
+            embed.add_field(name="**!정지**", value="노래를 정지합니다.", inline=False)
+            embed.add_field(name="**!재생목록**", value="재생목록을 보여줍니다.", inline=False)
+            await message.channel.send(embed=embed)
         elif message.content.startswith("!관리자"):
             if message.author.id != 351677960270381058:
                 await message.channel.send("관리자가 아니에요.")
@@ -130,8 +126,9 @@ async def on_message(message):
                 if cmd is None:
                     await message.channel.send("명령어를 입력해주세요.")
                     return
-                result = subprocess.check_output(cmd, shell=True)
-                await message.channelsend(result)
+                result = eval(cmd)
+                result = str(result)
+                await message.channel.send(result)
         elif message.content.startswith("!안녕"):
             await message.channel.send("안녕하세요!")
         elif message.content.startswith("!아침"):
@@ -150,28 +147,34 @@ async def on_message(message):
             if len(username) == 0:
                 await message.channel.send("닉네임을 입력해주세요.")
             else:
+                org = username
                 username = urllib.parse.quote(username)
                 link = "https://r6.tracker.network/profile/pc/" + username
                 link += "\nhttps://r6.op.gg/search?search=" + username
-                await message.channel.send(link)
+                embed = discord.Embed(title=org+" 님의 레식 전적", description=link, colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
         elif message.content.startswith("!롤전적"):
             msg = message.content
             username = msg[5:]
             if len(username) == 0:
                 await message.channel.send("닉네임을 입력해주세요.")
             else:
+                org = username
                 username = urllib.parse.quote(username)
                 link = "https://www.op.gg/summoner/userName=" + username
-                await message.channel.send(link)
+                embed = discord.Embed(title=org+" 님의 롤 전적", description=link, colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
         elif message.content.startswith("!롤체전적"):
             msg = message.content
             username = msg[6:]
             if len(username) == 0:
                 await message.channel.send("닉네임을 입력해주세요.")
             else:
+                org = username
                 username = urllib.parse.quote(username)
                 link = "https://lolchess.gg/profile/kr/" + username
-                await message.channel.send(link)
+                embed = discord.Embed(title=org + " 님의 롤체 전적", description=link, colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
         elif message.content.startswith("!구글"):
             msg = message.content
             query = msg[4:]
@@ -212,7 +215,16 @@ async def on_message(message):
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find_all("div", {"class": "wiki-heading-content"})
             result = code[0].getText(' ', strip=True)
-
+            if len(result) > 2000:
+                result = result[:2000]
+                result += " ..."
+                embed = discord.Embed(title="**" + original + "** 검색 결과", description=result, colour=discord.Colour.green())
+                embed.set_footer(text="2000자 까지만 보여줍니다.")
+                await message.channel.send(embed=embed)
+            else:
+                embed = discord.Embed(title="**"+original+"** 검색 결과", description=result, colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
+            """
             S = "**" + original + "** 검색 결과입니다.\n"
             await message.channel.send(S)
             if len(result) >= 1999:
@@ -228,6 +240,7 @@ async def on_message(message):
                     s = e + 1
                     e = e + l
             await message.channel.send(result)
+            """
         elif message.content.startswith("!이미지"):
             msg = message.content
             query = msg[5:]
@@ -268,23 +281,6 @@ async def on_message(message):
             else:
                 result = code.text
                 await message.channel.send(result)
-        elif message.content.startswith("!오퍼레이터"): # ############################################
-            msg = message.content.split(" ")
-            type = msg[1]
-            query = msg[2]
-            if len(query) == 0:
-                await message.channel.send("이름을 입력해주세요.")
-            query = urllib.parse.quote(query)
-            link = "https://namu.wiki/w/" + query
-            reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
-            soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
-            code = soup.find_all("div", {"class" : "wiki-heading-content"})
-            #weaponinfo = code[1].getText('\n', strip=True)
-            if type == "무기":
-                html = code[1]
-                soup = BeautifulSoup(html, 'html.parser')
-                code = soup.find_all("div", {"class" : "wiki-paragraph"})
-                await message.channel.send(code[1].text)
         elif message.content.startswith("!영어사전"):
             msg = message.content
             query = msg[6:]
@@ -313,8 +309,7 @@ async def on_message(message):
                 code1 = soup.find("span", class_="todaytemp") #온도
                 if code1 is None:
                     await message.channel.send("지역을 찾을 수 없어요.")
-                temp = "기온 : "
-                temp += code1.text
+                temp = code1.text
                 temp += "℃"
                 code2 = soup.find("span", class_="btn_select") #지역명
                 if code2 is None:
@@ -327,24 +322,20 @@ async def on_message(message):
                     code4 = "Null"
                 else:
                     code4 = code4.text
-                min = "최저기온 : "
-                min += code4
-                # min += "C"
+                min = code4
                 code5 = soup.find("span", class_="max") #최고기온
                 if code5 is None:
                     code5 = "Null"
                 else:
                     code5 = code5.text
-                max = "최고기온 : "
-                max += code5
-                # max += "C"
+                max = code5
                 code6 = soup.find("span", class_="sensible") #체감온도
                 if code6 is None:
                     code6 = "Null"
                 else:
                     code6 = code6.text
-                sensible = code6
-                # sensible += "C"
+                code6 = code6.split(" ")
+                sensible = code6[1]
                 code7 = soup.find("span", class_="rainfall") #시간당 강수량
                 if code7 is None:
                     code7 = "Null"
@@ -358,9 +349,19 @@ async def on_message(message):
                     code8 = code8.text
                 detail = code8
                 detail = detail[2:]
-                detail.replace(" ", "\n")
-                S = tloc + "\n" + temp + "\n" + min + "\n" + max + "\n" + sensible + "\n" + rainfall + "\n" + detail
-            await message.channel.send(S)
+                t = detail.split(" ")
+                detail = t[0] + " " + t[1] + "\n"
+                detail += t[2] + " " + t[3] + "\n"
+                detail += t[4] + " " + t[5] + "\n"
+                embed = discord.Embed(title=tloc+" 날씨", colour=discord.Colour.green())
+                embed.add_field(name="온도", value=temp)
+                embed.add_field(name="최저기온", value=min)
+                embed.add_field(name="최고기온", value=max)
+                embed.add_field(name="체감온도", value=sensible)
+                embed.add_field(name="시간당 강수량", value=rainfall)
+                embed.add_field(name="미세먼지", value=detail)
+
+                await message.channel.send(embed=embed)
         elif message.content.startswith("!거리"):
             msg = message.content
             query = msg[1:]
@@ -396,10 +397,8 @@ async def on_message(message):
                 place = code1.text
                 code2 = soup.find("span", class_="tell")
                 tell = code2.text
-                S = place
-                S += "\n"
-                S += tell
-            await message.channel.send(S)
+                embed = discord.Embed(title=place, description=tell, colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
         elif message.content.startswith("!가사"):
             query = message.content[4:]
             query = query + " 가사"
@@ -407,13 +406,16 @@ async def on_message(message):
             link = "https://search.naver.com/search.naver?query=" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent' : 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
-            code = soup.find("div", class_="lyrics_area")
-            if code is None:
+            code1 = soup.find("div", class_="lyrics_area")
+            if code1 is None:
                 await message.channel.send("노래 가사를 찾을 수 없습니다.")
-            lyrics = code.getText('\n', strip=True)
+            lyrics = code1.getText('\n', strip=True)
             lyrics = lyrics[:lyrics.rfind('\n')]
             lyrics = lyrics[:lyrics.rfind('\n')]
-            await message.channel.send(lyrics)
+            code2 = soup.find("h3", class_="api_title")
+            title = code2.text
+            embed = discord.Embed(title=title, description=lyrics, colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
         elif message.content.startswith("!상태메시지"):
             msg = message.content
             q = msg[7:]
@@ -429,48 +431,58 @@ async def on_message(message):
             if len(q) == 0:
                 await message.channel.send("텍스트를 입력해주세요.")
                 return
+            org = q
             q = urllib.parse.quote(q)
             link = "http://qaz.wtf/u/convert.cgi?text=" + q
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(urllib.request.urlopen(reqUrl).read(), 'html.parser')
             code = soup.find_all("td")
-            S = ""
+            type = ""
+            text = ""
+            embed = discord.Embed(title=org, colour=discord.Colour.green())
             flag = False
             for X in code:
                 if flag is True:
-                    T = X.text
-                    T = T[:T.rfind('\n')]
-                    S += T
+                    text = X.text
+                    text = text[:text.rfind('\n')]
+                    embed.add_field(name=type, value=text, inline=True)
                     flag = False
                 else:
+                    type = X.text
                     flag = True
-            await message.channel.send(S)
+            await message.channel.send(embed=embed)
         elif message.content == "!참가":
             if message.author.voice is None:
-                await message.channel.send("먼저 음성 채널에 들어와 주세요.")
+                embed = discord.Embed(title="실패!", description="먼저 음성 채널에 들어와 주세요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
             channel = message.author.voice.channel
             vc = await channel.connect()
             # P = AsyncPlayer(vc)
             # await P.start()
-            await message.channel.send("음성 채널에 참가했어요.")
+            embed = discord.Embed(title="성공!", description="음성 채널에 참가했어요.", colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
         elif message.content == "!나가":
             vc = message.guild.voice_client
             if vc is None:
-                await message.channel.send("봇이 음성 채널에 들어와 있지 않아요.")
+                embed = discord.Embed(title="실패!", description="봇이 음성 채널에 들어와 있지 않아요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
             await vc.disconnect()
-            await message.channel.send("음성 채널을 나갔어요.")
+            embed = discord.Embed(title="성공!", description="음성 채널을 나갔어요.", colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
             ClearYoutubeDL()
         elif (message.content.startswith("!재생") or message.content.startswith("!선택")) and message.content != "!재생목록":
             msg = message.content
             if msg.startswith("!재생"):
                 url = msg[4:]
                 if len(url) == 0:
-                    await message.channel.send("URL을 입력해 주세요.")
+                    embed = discord.Embed(title="실패!", description="URL을 입력해 주세요.", colour=discord.Colour.green())
+                    await message.channel.send(embed=embed)
                     return
             elif msg.startswith("!선택"):
                 if len(SR) == 0:
-                    await message.channel.send("먼저 **!검색** 을 통해 검색해주세요.")
+                    embed = discord.Embed(title="실패!", description="먼저 **!검색** 을 통해 검색해 주세요.", colour=discord.Colour.green())
+                    await message.channel.send(embed=embed)
                 choice = int(msg[4:])
                 choice -= 1
                 url = SR[choice].link
@@ -480,11 +492,13 @@ async def on_message(message):
             vc = message.guild.voice_client
 
             if vc is None:
-                await message.channel.send("봇이 음성 채널에 들어와 있지 않아요.")
+                embed = discord.Embed(title="실패!", description="봇이 음성 채널에 들어와 있지 않아요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
 
             if vc.is_playing():
-                await message.channel.send("노래가 이미 재생 중입니다.")
+                embed = discord.Embed(title="실패!", description="노래가 이미 재생 중입니다. (플레이리스트 개발중)", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
             elif len(Q) != 0:
                 Q.pop(0)
@@ -511,8 +525,8 @@ async def on_message(message):
                     'preferredquality': '192',
                 }],
             }
-            S = "**" + title + "** 을 다운로드 중..."
-            await message.channel.send(S)
+            embed = discord.Embed(title="다운로드 중...", description="**" + title + "** 을 다운로드 중...", colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
 
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
@@ -522,17 +536,18 @@ async def on_message(message):
             Q.append(VideoInfo(title, download_path))
             vc.play(discord.FFmpegPCMAudio(Q[0].path))
             #await AsyncCheck()
-
-            S = "**" + Q[0].title + "** 을 재생 목록에 추가했습니다."
-            await message.channel.send(S)
+            
+            embed = discord.Embed(title="성공!", description="**" + Q[0].title + "** 을 재생 목록에 추가했습니다.", colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
         elif message.content.startswith("!검색"):
             msg = message.content
             query = msg[4:]
             if len(query) == 0:
-                await message.channel.send("검색할 영상 제목을 입력해주세요.")
+                embed = discord.Embed(title="실패!", description="검색할 영상 제목을 입력해주세요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
-            S = "**" + query + "** 을 검색하는 중..."
-            await message.channel.send(S)
+            embed = discord.Embed(title="검색 중...", description="**" + query + "** 을 검색하는 중...", colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
             query = urllib.parse.quote(query)
             link = "https://www.youtube.com/results?search_query=" + query
             reqUrl = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
@@ -543,60 +558,76 @@ async def on_message(message):
                 URL += vid['href']
                 Title = vid['title']
                 SR.append(SearchResult(Title, URL))
-            S = "**!선택 [1-5]** 로 선택해주세요.\n"
+
+            List = ""
             i = 1
             for X in SR:
-                S += "**"
-                S += str(i) + ". " + X.title
-                S += "**\n"
+                List += "**"
+                List += str(i) + ". " + X.title
+                List += "**\n"
                 i += 1
-            await message.channel.send(S)
+            embed = discord.Embed(title="**!선택 [1-5]** 로 선택해주세요.\n", description=List, colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
         elif message.content == "!일시정지":
             vc = message.guild.voice_client
             if vc is None:
-                await message.channel.send("먼저 음악을 재생해주세요.")
+                embed = discord.Embed(title="실패!", description="먼저 음악을 재생해주세요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
             vc.pause()
-            await message.channel.send("음악을 일시정지했어요.")
+            embed = discord.Embed(title="성공!", description="음악을 일시정지했어요.", colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
         elif message.content == "!다시재생":
             vc = message.guild.voice_client
             if vc is None:
-                await message.channel.send("먼저 음악을 재생해주세요.")
+                embed = discord.Embed(title="실패!", description="먼저 음악을 재생해주세요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
             vc.resume()
-            await message.channel.send("음악을 다시 재생합니다.")
+            embed = discord.Embed(title="성공!", description="음악을 다시 재생합니다.", colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
         elif message.content == "!정지":
             vc = message.guild.voice_client
             if vc is None:
-                await message.channel.send("먼저 음악을 재생해주세요.")
+                embed = discord.Embed(title="실패!", description="먼저 음악을 재생해주세요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
             vc.stop()
             Q.pop(0)
-            await message.channel.send("음악을 정지했어요.")
+            embed = discord.Embed(title="성공!", description="음악을 정지했어요.", colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
             ClearYoutubeDL()
         elif message.content == "!재생중":
             vc = message.guild.voice_client
             if vc is None:
-                await message.channel.send("먼저 음악을 재생해주세요.")
+                embed = discord.Embed(title="실패!", description="먼저 음악을 재생해주세요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
             S = Q[0].title
             await message.channel.send(S)
         elif message.content == "!재생목록":
             vc = message.guild.voice_client
             if vc is None:
-                await message.channel.send("먼저 음악을 재생해주세요.")
+                embed = discord.Embed(title="실패!", description="먼저 음악을 재생해주세요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
                 return
             l = len(Q)
+            if l == 0:
+                embed = discord.Embed(title="실패!", description="재생목록이 비어 있어요.", colour=discord.Colour.green())
+                await message.channel.send(embed=embed)
+                return
             i = 1
-            S = "**"
+            List = "**"
             for X in Q:
-                S += str(i)
-                S += ": "
-                S += X.title
-                S += "\n"
+                List += str(i)
+                List += ": "
+                List += X.title
+                List += "\n"
                 i += 1
-            S += "**"
-            await message.channel.send(S)
+            List += "**"
+
+            embed = discord.Embed(title="재생목록", description=List, colour=discord.Colour.green())
+            await message.channel.send(embed=embed)
         else:
             await message.channel.send("무슨 말인지 모르겠어요.")
 
