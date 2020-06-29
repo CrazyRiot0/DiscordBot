@@ -10,6 +10,8 @@ import string
 from random import randint
 import random
 import time
+import datetime
+import base64
 import asyncio
 import os
 import shutil
@@ -400,9 +402,15 @@ async def on_message(message):
     if ignore == True and message.author.id != AdminID:
         return
     if message.content.startswith("!") and message.content.startswith("!!") is False:
-        print("[", end='')
-        print(message.author, end="] ")
-        print(message.content)
+        now = datetime.datetime.now()
+        Time = "[" + str(now.year) + "-" + str(now.month) + "-" + str(now.day) + " " + \
+               str(now.hour) + ":" + str(now.minute) + ":" + str(now.second) + "]"
+        S = Time + " [" + str(message.guild) + "] [" + str(message.author) + "] " + message.content
+        print(S)
+        log_path = os.path.join(PATH, "log.txt")
+        with open(log_path, mode="a", encoding="utf-8") as f:
+            f.write(S+"\n")
+
         if message.content == "!명령어":
             embed = discord.Embed(title="𝓓𝓲𝓼𝓒𝓸𝓻𝓭𝓑𝓞𝓣 명령어", colour=discord.Colour.green())
             inline = False
@@ -425,7 +433,7 @@ async def on_message(message):
             embed.add_field(name="**!네이버/구글 [검색어]**", value="네이버 또는 구글로부터 사진을 검색합니다.", inline=inline)
             embed.add_field(name="**!다나와 [제품]**", value="다나와에서 제품 가격을 보여줍니다.", inline=inline)
             embed.add_field(name="**!미니게임**", value="미니게임 명령어를 보여줍니다.", inline=inline)
-            embed.add_field(name="**!자가진단 [이름] [코드]**", value="자가진단을 대신 해줍니다! (경기도만)", inline=inline)
+            embed.add_field(name="**!자가진단 [학교] [이름] [생년월일]**", value="자가진단을 대신 해줍니다! (경기도만)", inline=inline)
             embed.add_field(name="**!명령어 노래봇**", value="노래봇 명령어를 보여줍니다.", inline=inline)
             embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
             await message.channel.send(embed=embed)
@@ -500,23 +508,29 @@ async def on_message(message):
                 embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
                 await message.channel.send(embed=embed)
             elif query == "실행": #!관리자 실행 []
-                if platform == "Windows":
-                    embed = discord.Embed(title="실패!", description="Windows 운영체제에서는 사용할 수 없습니다!", colour=discord.Colour.green())
-                    embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
-                    await message.channel.send(embed=embed)
-                    return
                 cmd = message.content[8:]
                 if cmd is None:
                     embed = discord.Embed(title="실패!", description="명령어를 입력해주세요.", colour=discord.Colour.green())
                     embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
                     await message.channel.send(embed=embed)
                     return
-                command = cmd.split(" ")
-                result = subprocess.run(command, stdout=subprocess.PIPE)
-                R = result.stdout.decode('utf-8')
-                embed = discord.Embed(title=cmd, description=R, colour=discord.Colour.green())
-                embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
-                await message.channel.send(embed=embed)
+                if platform == "Windows":
+                    sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+                    output = sp.stdout.read()
+                    try:
+                        output = output.decode("utf-8")
+                    except UnicodeDecodeError:
+                        output = output.decode("utf-16")
+                    embed = discord.Embed(title=cmd, description=output, colour=discord.Colour.green())
+                    embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
+                    await message.channel.send(embed=embed)
+                elif platform == "Linux":
+                    command = cmd.split(" ")
+                    result = subprocess.run(command, stdout=subprocess.PIPE)
+                    R = result.stdout.decode('utf-8')
+                    embed = discord.Embed(title=cmd, description=R, colour=discord.Colour.green())
+                    embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
+                    await message.channel.send(embed=embed)
         elif message.content.startswith("!코드"):
             link = "https://github.com/CrazyRiot0/DiscordBot/blob/master/main.py"
             await message.channel.send(link)
@@ -1253,13 +1267,15 @@ async def on_message(message):
         elif message.content.startswith("!자가진단"):
             msg = message.content
             list = msg.split(" ")
-            if len(list) != 3:
-                embed = discord.Embed(title="실패!", description="**[!자가진단 [이름] [코드]]** 형식으로 입력해주세요.", colour=discord.Colour.green())
+            if len(list) != 4:
+                embed = discord.Embed(title="실패!", description="**[!자가진단 [학교] [이름] [생년월일]]** 형식으로 입력해주세요.\n"
+                                                               "ex) **!자가진단 동암중학교 김민재 050718**", colour=discord.Colour.green())
                 embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
                 await message.channel.send(embed=embed)
                 return
-            name = list[1]
-            code = list[2]
+            school = list[1]
+            name = list[2]
+            birth = list[3]
 
             chrome_options = webdriver.ChromeOptions()
             chrome_options.add_argument("headless")
@@ -1270,20 +1286,39 @@ async def on_message(message):
                 wd = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)
             elif platform == "Linux":
                 wd = webdriver.Chrome(options=chrome_options)
-            wd.get("https://eduro.goe.go.kr/stv_cvd_co00_010.do")
+            wd.get("https://eduro.goe.go.kr/stv_cvd_co00_002.do")
 
             wait = WebDriverWait(wd, 5)
+            Main_Page = wd.current_window_handle
             try:
+                SchoolSearchButton = wait.until(EC.element_to_be_clickable((By.ID, "btnSrchSchul")))
+                SchoolSearchButton.click()
+                for handle in wd.window_handles:
+                    if handle != Main_Page:
+                        SearchSchool_Page = handle
+                wd.switch_to.window(SearchSchool_Page)
+                # In School Search Window
+                InsertSchool = wait.until(EC.presence_of_element_located((By.ID, "schulNm")))
+                InsertSchool.send_keys(school)
+                SearchButton = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "btn_sm.btn_gray")))
+                SearchButton.click()
+                ConfirmButton = wait.until(EC.element_to_be_clickable((By.ID, "btnConfirm")))
+                ConfirmButton.click()
+                # End of Search Window
+                wd.switch_to.window(Main_Page)
+                # Back to Main Page
+
                 InsertName = wait.until(EC.presence_of_element_located((By.ID, "pName")))
                 InsertName.send_keys(name)
-                InsertCode = wait.until(EC.presence_of_element_located((By.ID, "qstnCrtfcNo")))
-                InsertCode.send_keys(code)
-                ConfirmButton = wait.until(EC.presence_of_element_located((By.ID, "btnConfirm")))
+                InsertBirth = wait.until(EC.presence_of_element_located((By.ID, "frnoRidno")))
+                InsertBirth.send_keys(birth)
+                ConfirmButton = wait.until(EC.element_to_be_clickable((By.ID, "btnConfirm")))
                 ConfirmButton.click()
             except TimeoutException:
                 embed = discord.Embed(title="실패!", description="서버가 응답하지 않습니다.", colour=discord.Colour.green())
                 embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
                 await message.channel.send(embed=embed)
+                wd.quit()
                 return
 
             # Info Delivered
@@ -1299,7 +1334,7 @@ async def on_message(message):
                 CheckBox4.click()
                 CheckBox5 = wait.until(EC.presence_of_element_located((By.ID, "rspns090")))
                 CheckBox5.click()
-                ConfirmButton = wait.until(EC.presence_of_element_located((By.ID, "btnConfirm")))
+                ConfirmButton = wait.until(EC.element_to_be_clickable((By.ID, "btnConfirm")))
                 ConfirmButton.click()
                 embed = discord.Embed(title="성공!", description="자가진단을 완료했습니다.", colour=discord.Colour.green())
                 embed.set_footer(text="Requested by " + message.author.name, icon_url=message.author.avatar_url)
